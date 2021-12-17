@@ -10,7 +10,7 @@ public class Body : MonoBehaviour
 
     public void Movement()
         {
-        if (_timeDelay < 0.1) _timeDelay += Time.deltaTime;
+        if (_timeDelay < 0) _timeDelay += Time.deltaTime;
         else
         {
             _timeDelay = 0;
