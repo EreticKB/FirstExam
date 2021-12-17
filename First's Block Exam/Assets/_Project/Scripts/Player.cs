@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public Transform[] Segm; 
-    public LinkedList<Transform> Segments;
+    public Body[] Segm;
+    //public LinkedList<Body> Segments; потом перейти на него с массива
     public Rigidbody SnakeHead;
     public float SnakeSpeed;
     public float ForwardVelocity;
-    public float _distance;
-    private float _sqrtDistance;
 
     /*private void Update()
     {
@@ -25,14 +23,17 @@ public class Player : MonoBehaviour
             segment.Movement();
         }
     }*/
-    private void Awake()
+    private void Update()
     {
-        _sqrtDistance = Mathf.Sqrt(_distance);
+        foreach (Body segment in Segm)
+        {
+            segment.Movement();
+        }
     }
     void FixedUpdate()
     {
+        
         SnakeHeadMovement();
-        SnakeBodyMovement();
     }
 
     private void SnakeHeadMovement()
@@ -44,21 +45,6 @@ public class Player : MonoBehaviour
             float deltaX = Mathf.InverseLerp(2.6f, 3.4f, GetOnPlatformPosition(Input.mousePosition).x);
             float targetX = Mathf.Lerp(0.25f, 5.75f, deltaX);
             SnakeHead.AddForce((new Vector3(targetX, 0, 0) - new Vector3(SnakeHead.position.x, 0, 0)) * SnakeSpeed);
-        }
-    }
-
-    private void SnakeBodyMovement()
-    {
-        Vector3 previousSegmentPosition = transform.localPosition;
-        foreach (Transform segment in Segm)
-        {
-            if ((segment.localPosition - previousSegmentPosition).sqrMagnitude > _sqrtDistance)
-            {
-                Vector3 currentSegmentPositon = segment.localPosition;
-                segment.localPosition = previousSegmentPosition;
-                previousSegmentPosition = currentSegmentPositon;
-            }
-            else break;
         }
     }
 
