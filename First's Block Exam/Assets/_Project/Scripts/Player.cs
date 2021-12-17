@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
     {
         foreach (Body segment in Segm)
         {
-            segment.Movement();
+            segment.Movement(transform);
         }
     }
     void FixedUpdate()

@@ -5,23 +5,20 @@ public class Body : MonoBehaviour
 
     //Возможно скрипт полностью устарел.
     public Transform PreviousSegment;
-    private Vector3 _transformBuffer;
-    private float _timeDelay;
+    public float _minDistance;
+    public float Speed;
 
     private void Awake()
     {
-        _transformBuffer = PreviousSegment.position;
     }
-    public void Movement()
+    public void Movement(Transform headposition)
         {
-        if (_timeDelay < 0.1) _timeDelay += Time.deltaTime;
-        else
-        {
-            _timeDelay = 0;
-            transform.position = _transformBuffer;
-            _transformBuffer = PreviousSegment.position;
-
-        }
-
+        float distance = (PreviousSegment.position - transform.position).magnitude;
+        Vector3 newPosition = PreviousSegment.position;
+        newPosition.y = headposition.position.y;
+        float lerpT = Time.deltaTime * distance / _minDistance * Speed;
+        Debug.Log(lerpT);
+        if (lerpT > 0.5f) lerpT = 0.5f;
+        transform.position = Vector3.Slerp(transform.position, newPosition, lerpT);
         }
 }

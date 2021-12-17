@@ -109,3 +109,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PreviousSegment: {fileID: 0}
+  _minDistance: 0.5
+  Speed: 50
