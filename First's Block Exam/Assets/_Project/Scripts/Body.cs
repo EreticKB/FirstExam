@@ -7,21 +7,19 @@ public class Body : MonoBehaviour
     public Transform PreviousSegment;
     private Vector3 _transformBuffer;
     private float _timeDelay;
+    private Rigidbody _thisSegment;
+    public float Speed;
+    public int TargetDistance;
 
     private void Awake()
     {
         _transformBuffer = PreviousSegment.position;
+        _thisSegment = GetComponent<Rigidbody>();
     }
-    public void Movement()
-        {
-        if (_timeDelay < 0.1) _timeDelay += Time.deltaTime;
-        else
-        {
-            _timeDelay = 0;
-            transform.position = _transformBuffer;
-            _transformBuffer = PreviousSegment.position;
-
-        }
-
-        }
+    private void FixedUpdate()
+    {
+        transform.LookAt(_transformBuffer);
+        _thisSegment.velocity = Vector3.forward * Speed * Time.deltaTime;
+        if ((transform.position - _transformBuffer).magnitude < TargetDistance) _transformBuffer = PreviousSegment.position;
+    }
 }

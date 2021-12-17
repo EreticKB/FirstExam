@@ -23,16 +23,8 @@ public class Player : MonoBehaviour
             segment.Movement();
         }
     }*/
-    private void Update()
-    {
-        foreach (Body segment in Segm)
-        {
-            segment.Movement();
-        }
-    }
     void FixedUpdate()
     {
-        
         SnakeHeadMovement();
     }
 
