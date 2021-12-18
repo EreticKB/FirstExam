@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PreviousSegment: {fileID: 0}
-  Speed: 500
+  Speed: 210
   TargetDistance: 0.05
 --- !u!54 &2297895356380508818
 Rigidbody:
