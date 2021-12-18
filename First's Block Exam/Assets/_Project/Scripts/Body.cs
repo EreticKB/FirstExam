@@ -7,10 +7,15 @@ public class Body : MonoBehaviour
     public Transform PreviousSegment;
     private Vector3 _transformBuffer;
     private float _timeDelay;
+    public bool DebugCheck;
 
     private void Awake()
     {
         _transformBuffer = PreviousSegment.position;
+    }
+    private void Update()
+    {
+        Movement();
     }
     public void Movement()
         {
