@@ -110,7 +110,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PreviousSegment: {fileID: 0}
-  Speed: 100
+  Speed: 500
+  TargetDistance: 0.05
 --- !u!54 &2297895356380508818
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -120,9 +121,9 @@ Rigidbody:
   m_GameObject: {fileID: 8783601237708570865}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 15
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 4
