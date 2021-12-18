@@ -9,6 +9,7 @@ public class Body : MonoBehaviour
     private Rigidbody _thisSegment;
     public float Speed;
     public float TargetDistance;
+    public bool DebugCheck;
 
     private void Awake()
     {
@@ -18,19 +19,20 @@ public class Body : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (DebugCheck) Debug.Log("FixedUpdate");
         float distance = Mathf.Abs((transform.position - _transformBuffer).sqrMagnitude);
         if (distance < TargetDistance)
         {
             _transformBuffer = PreviousSegment.position;
             _thisSegment.velocity = Vector3.forward * 0;
-            //Debug.Log("========="+ distance);
+            if (DebugCheck) Debug.Log("========="+ distance);
         }
         else
         {
             transform.LookAt(_transformBuffer);
             _transformBuffer = PreviousSegment.position;
             _thisSegment.velocity = transform.forward * Speed * Time.deltaTime;
-            //Debug.Log(distance);
+            if (DebugCheck) Debug.Log(distance);
         }
     }
 }
