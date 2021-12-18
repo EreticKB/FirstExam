@@ -4,37 +4,37 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public Body[] Segm;
-    //public LinkedList<Body> Segments; потом перейти на него с массива
     public Rigidbody SnakeHead;
     public float SnakeSensitivity;
     public float SnakeSideForceMax;
     public float ForwardVelocity;
 
-    /*private void Update()
+    private Body _body;
+
+    private void Awake()
     {
-        /** Использовать когда буду работать с генерацией.
-        foreach (Body segment in Segments.Reverse())
-        {
-            segment.Movement();
-        }
-        // Для теста пока что использую массив.
-        foreach (Body segment in Segm.Reverse())
-        {
-            segment.Movement();
-        }
-    }*/
+        _body = GetComponent<Body>();
+    }
     private void Update()
     {
-        /*foreach (Body segment in Segm)
+        if (Input.GetKeyDown(KeyCode.A))
         {
-            segment.Movement();
-        }*/
+            _body.ExtendSnake();
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            _body.RetractSnake();
+        }
+
+
+
     }
     void FixedUpdate()
     {       
         SnakeHeadMovement();
     }
+
+   
 
     private void SnakeHeadMovement()
     {
@@ -56,6 +56,7 @@ public class Player : MonoBehaviour
     {
         return Camera.main.ScreenToWorldPoint(new Vector3(rawPosition.x, rawPosition.y, 2f));
     }
+
 
     
 }

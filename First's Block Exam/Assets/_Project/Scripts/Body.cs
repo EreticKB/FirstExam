@@ -1,32 +1,50 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Body : MonoBehaviour
 {
+    public Transform Head;
+    public float HeadDiameter;
+   
 
-    //Возможно скрипт полностью устарел.
-    public Transform PreviousSegment;
-    private Vector3 _transformBuffer;
-    private float _timeDelay;
-    public bool DebugCheck;
+    private LinkedListNode<Vector3> _linkedListLNode;
+    private LinkedList<Transform> _segments = new LinkedList<Transform>();
+    private LinkedList<Vector3> _positions = new LinkedList<Vector3>();
 
     private void Awake()
     {
-        _transformBuffer = PreviousSegment.position;
+        _positions.AddLast(Head.position);
     }
+
     private void Update()
     {
-        Movement();
+        float distance = (Head.position - _positions.First.Value).magnitude;//рассчет направления от старой позиции к новой
+        if (distance > HeadDiameter) //если вышли за диаметр головы надо положить в список новую позицию головы и удалить устаревшую последнюю позицию
+        {
+            Vector3 direction = (Head.position - _positions.First.Value).normalized;
+            _positions.AddFirst(_positions.First.Value + direction * HeadDiameter);
+            _positions.RemoveLast();
+            distance -= HeadDiameter; //чтобы не уйти далеко за 1 и не было рывка.
+        }
+
+        _linkedListLNode = _positions.First;
+        foreach (Transform segment in _segments)
+        {
+            segment.position = Vector3.Lerp(_linkedListLNode.Next.Value, _linkedListLNode.Value, distance / HeadDiameter);
+            _linkedListLNode = _linkedListLNode.Next;
+        }
     }
-    public void Movement()
-        {
-        if (_timeDelay < 0.1) _timeDelay += Time.deltaTime;
-        else
-        {
-            _timeDelay = 0;
-            transform.position = _transformBuffer;
-            _transformBuffer = PreviousSegment.position;
+    public void ExtendSnake()
+    {
+        Transform segment = Instantiate(Head, _positions.Last.Value, Quaternion.identity, transform);
+        _segments.AddLast(segment);
+        _positions.AddLast(segment.position);
+    }
 
-        }
-
-        }
+    public void RetractSnake()
+    {
+        Destroy(_segments.First.Value.gameObject);
+        _segments.RemoveFirst();
+        _positions.Remove(_positions.First.Next);
+    }
 }
