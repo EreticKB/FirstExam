@@ -19,7 +19,5 @@ public class CameraFollow : MonoBehaviour
         {
             _camera.position = new Vector3(_camera.position.x, _camera.position.y, SnakeHead.position.z - _cameraOffSet);
         }
-        Debug.Log(_camera.position.z);
-        Debug.Log(SnakeHead.position.z - _cameraOffSet + "-----");
     }
 }

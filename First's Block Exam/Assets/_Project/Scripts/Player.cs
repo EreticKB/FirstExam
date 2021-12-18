@@ -7,7 +7,8 @@ public class Player : MonoBehaviour
     public Body[] Segm;
     //public LinkedList<Body> Segments; потом перейти на него с массива
     public Rigidbody SnakeHead;
-    public float SnakeSpeed;
+    public float SnakeSensitivity;
+    public float SnakeSideForceMax;
     public float ForwardVelocity;
 
     /*private void Update()
@@ -25,26 +26,29 @@ public class Player : MonoBehaviour
     }*/
     private void Update()
     {
-        foreach (Body segment in Segm)
+        /*foreach (Body segment in Segm)
         {
             segment.Movement();
-        }
+        }*/
     }
     void FixedUpdate()
-    {
-        
+    {       
         SnakeHeadMovement();
     }
 
     private void SnakeHeadMovement()
     {
         SnakeHead.velocity = Vector3.forward * ForwardVelocity * Time.deltaTime;
-        if (GetOnPlatformPosition(Input.mousePosition).x < 2.4f || GetOnPlatformPosition(Input.mousePosition).x > 3.5f) return;
+        if (GetOnPlatformPosition(Input.mousePosition).x < 13.5f || GetOnPlatformPosition(Input.mousePosition).x > 16.9f) return;
         if (Input.GetMouseButton(0))
         {
-            float deltaX = Mathf.InverseLerp(2.6f, 3.4f, GetOnPlatformPosition(Input.mousePosition).x);
-            float targetX = Mathf.Lerp(0.25f, 5.75f, deltaX);
-            SnakeHead.AddForce((new Vector3(targetX, 0, 0) - new Vector3(SnakeHead.position.x, 0, 0)) * SnakeSpeed);
+            float deltaX = Mathf.InverseLerp(13.6f, 16.9f, GetOnPlatformPosition(Input.mousePosition).x);
+            float targetX = Mathf.Lerp(0.5f, 29.5f, deltaX);
+            Vector3 currentSideForce = (new Vector3(targetX, 0, 0) - new Vector3(SnakeHead.position.x, 0, 0)) * SnakeSensitivity;
+            
+            if (Mathf.Abs(currentSideForce.x) > SnakeSideForceMax) currentSideForce.x = Mathf.Sign(currentSideForce.x) * SnakeSideForceMax;
+            Debug.Log(currentSideForce);
+            SnakeHead.AddForce(currentSideForce);
         }
     }
 
