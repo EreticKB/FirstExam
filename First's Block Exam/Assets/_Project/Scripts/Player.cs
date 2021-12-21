@@ -15,6 +15,11 @@ public class Player : MonoBehaviour
     {
         _body = GetComponent<Body>();
     }
+
+    private void Start()
+    {
+        for (int i = 0; i < 4; i++) _body.ExtendSnake();
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.A))
@@ -25,9 +30,6 @@ public class Player : MonoBehaviour
         {
             _body.RetractSnake();
         }
-
-
-
     }
     void FixedUpdate()
     {       
@@ -38,7 +40,7 @@ public class Player : MonoBehaviour
 
     private void SnakeHeadMovement()
     {
-        SnakeHead.velocity = Vector3.forward * ForwardVelocity * Time.deltaTime;
+        SnakeHead.velocity = Vector3.forward * ForwardVelocity;
         float mousePosition = GetOnPlatformPosition(Input.mousePosition).x;
         if (mousePosition < 13.5f) mousePosition = 13.5f;
         if (mousePosition > 16.9f) mousePosition = 16.9f;

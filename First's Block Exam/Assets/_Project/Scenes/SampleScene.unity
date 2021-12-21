@@ -2857,7 +2857,7 @@ MonoBehaviour:
   SnakeHead: {fileID: 2131241718}
   SnakeSensitivity: 300
   SnakeSideForceMax: 1000
-  ForwardVelocity: 200
+  ForwardVelocity: 10
 --- !u!114 &2131241721
 MonoBehaviour:
   m_ObjectHideFlags: 0
