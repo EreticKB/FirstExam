@@ -4,11 +4,11 @@ using UnityEngine;
 public class Body : MonoBehaviour
 {
     public Transform Head;
+    public Transform Tail;
+    private Transform _headTwo;
     public Player Snake;
     public float HeadDiameter;
     public GhostPlayer GhostPlayer;
-
-
 
     private LinkedListNode<Vector3> _linkedListLNode;
     private LinkedList<Transform> _segments = new LinkedList<Transform>();
@@ -17,10 +17,11 @@ public class Body : MonoBehaviour
     private void Awake()
     {
         _positions.AddLast(Head.position);
+        _headTwo = GhostPlayer.transform;
     }
 
     private void Update()
-    {
+    {   
         float distance = (Head.position - _positions.First.Value).magnitude;//рассчет направления от старой позиции к новой
         if (distance > HeadDiameter) //если вышли за диаметр головы надо положить в список новую позицию головы и удалить устаревшую последнюю позицию
         {
@@ -29,33 +30,32 @@ public class Body : MonoBehaviour
             _positions.RemoveLast();
             distance -= HeadDiameter; //чтобы не уйти далеко за 1 и не было рывка.
         }
-
-        _linkedListLNode = _positions.First;
-
         if (Snake.Collide)
         {
-            distance = GhostPlayer.Distance;
-            if (distance / HeadDiameter >= 1f)
-            {
-                RetractSnake();
-                Snake.Collide = false;
-            }
+            distance = (_headTwo.position - GhostPlayer.Position).magnitude;
+            if (distance > HeadDiameter) distance = HeadDiameter;
         }
 
+        _linkedListLNode = _positions.First;
         foreach (Transform segment in _segments)
         {
             segment.position = Vector3.Lerp(_linkedListLNode.Next.Value, _linkedListLNode.Value, distance / HeadDiameter);
-            _linkedListLNode = _linkedListLNode.Next;
+            _linkedListLNode = _linkedListLNode.Next;   
+        }
+        if (distance / HeadDiameter >= 1f)
+        {
+            RetractSnake(true);
+            Snake.Collide = false;
         }
     }
     public void ExtendSnake()
     {
-        Transform segment = Instantiate(Head, _positions.Last.Value, Quaternion.identity, transform);
+        Transform segment = Instantiate(Tail, _positions.Last.Value, Quaternion.identity, transform);
         _segments.AddLast(segment);
         _positions.AddLast(segment.position);
     }
 
-    public void RetractSnake()
+    public void RetractSnake(bool isStay)
     {
         if (_segments.First == null)
         {
@@ -64,6 +64,8 @@ public class Body : MonoBehaviour
         }
         Destroy(_segments.First.Value.gameObject);
         _segments.RemoveFirst();
-        _positions.Remove(_positions.First.Next);
+        if (isStay) _positions.RemoveLast();
+        else _positions.Remove(_positions.First.Next);
+        
     }
 }

@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < 4; i++) _body.ExtendSnake();
+        for (int i = 0; i < 20; i++) _body.ExtendSnake();
     }
     private void Update()
     {
@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            _body.RetractSnake();
+            _body.RetractSnake(true);
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -71,6 +71,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
+        if (Collide) return;
         if (_currentBlock==null) _currentBlock = collision;
         if (!_currentBlock.collider.TryGetComponent(out Blocks bloks))
         {
@@ -84,7 +85,6 @@ public class Player : MonoBehaviour
             _currentBlock = null;
             return;
         }
-        if (Collide) return;
         Collide = bloks.GetDamage();
        Debug.Log("It's still alive");
     }

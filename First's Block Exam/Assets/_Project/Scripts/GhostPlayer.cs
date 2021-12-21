@@ -4,9 +4,8 @@ public class GhostPlayer : MonoBehaviour
 {
     public Player SnakeHeadLink;
     private Rigidbody _snakeHead;
-    private readonly Vector3 _position = new Vector3(64f, 0.6f, 22f);
+    public readonly Vector3 Position = new Vector3(64f, 0.6f, 22f);
     public Body Body;
-    [HideInInspector]public float Distance;
 
     private void Awake()
     {
@@ -19,12 +18,12 @@ public class GhostPlayer : MonoBehaviour
     }
     private void Update()
     {
-        Distance = (_snakeHead.position - _position).magnitude;
-        if (Distance > Body.HeadDiameter)
+        float distance = (_snakeHead.position - Position).magnitude;
+        if (distance > Body.HeadDiameter)
         {
-            Vector3 direction = (_snakeHead.position - _position).normalized;
-            Distance -= Body.HeadDiameter;
-            _snakeHead.position = _position + direction * Distance;
+            Vector3 direction = (_snakeHead.position - Position).normalized;
+            distance -= Body.HeadDiameter;
+            _snakeHead.position = Position + direction * distance;
         }
     }
 
