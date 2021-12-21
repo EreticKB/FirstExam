@@ -6,9 +6,9 @@ public class Player : MonoBehaviour
     public float SnakeSensitivity;
     public float SnakeSideForceMax;
     public float ForwardVelocity;
+    public bool CheckSine;
+    private Collision _currentBlock;
 
-    
-    private float _timer = 3f;
     [HideInInspector] public Vector3 ThrowForce;
     [HideInInspector] public bool Collide;
 
@@ -33,13 +33,19 @@ public class Player : MonoBehaviour
         {
             _body.RetractSnake();
         }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (CheckSine) CheckSine = false;
+            else CheckSine = true;
+            Debug.Log("FlipCheck");
+        }
     }
     void FixedUpdate()
-    {       
+    {
         SnakeHeadMovement();
     }
 
-   
+
 
     private void SnakeHeadMovement()
     {
@@ -65,15 +71,27 @@ public class Player : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        if (!collision.collider.TryGetComponent(out Blocks bloks)) return;
-        Vector3 collisionNormal = -collision.contacts[0].normal.normalized;
+        if (_currentBlock==null) _currentBlock = collision;
+        if (!_currentBlock.collider.TryGetComponent(out Blocks bloks))
+        {
+            _currentBlock = null;
+            return;
+        }
+        Vector3 collisionNormal = -_currentBlock.contacts[0].normal.normalized;
         float dot = Vector3.Dot(collisionNormal, Vector3.forward);
-        if (dot < 0.88f) return;
-        _timer -= Time.deltaTime;
-        if (_timer >= 0) return;
-        _timer = 5f;
+        if (dot < 0.9f)
+        {
+            _currentBlock = null;
+            return;
+        }
+        if (Collide) return;
         Collide = bloks.GetDamage();
-        if (Collide) Debug.Log("It's still alive");
-        else Debug.Log("It's dead");
+       Debug.Log("It's still alive");
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (!collision.collider.TryGetComponent(out Blocks bloks)) return;
+        _currentBlock = null;
     }
 }

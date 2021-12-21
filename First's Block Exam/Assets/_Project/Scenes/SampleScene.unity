@@ -260,7 +260,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6536462621998104680, guid: 0b9619a4a2493914a8fc32247b63eca9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.76
+      value: 7.5
       objectReference: {fileID: 0}
     - target: {fileID: 6536462621998104680, guid: 0b9619a4a2493914a8fc32247b63eca9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -355,7 +355,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6536462621998104680, guid: 0b9619a4a2493914a8fc32247b63eca9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 13.54
+      value: 12.5
       objectReference: {fileID: 0}
     - target: {fileID: 6536462621998104680, guid: 0b9619a4a2493914a8fc32247b63eca9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1750,7 +1750,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6536462621998104680, guid: 0b9619a4a2493914a8fc32247b63eca9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 27.24
+      value: 27.5
       objectReference: {fileID: 0}
     - target: {fileID: 6536462621998104680, guid: 0b9619a4a2493914a8fc32247b63eca9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2365,7 +2365,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6536462621998104680, guid: 0b9619a4a2493914a8fc32247b63eca9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 17.85
+      value: 17.5
       objectReference: {fileID: 0}
     - target: {fileID: 6536462621998104680, guid: 0b9619a4a2493914a8fc32247b63eca9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2715,7 +2715,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6536462621998104680, guid: 0b9619a4a2493914a8fc32247b63eca9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 22.86
+      value: 22.5
       objectReference: {fileID: 0}
     - target: {fileID: 6536462621998104680, guid: 0b9619a4a2493914a8fc32247b63eca9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2987,6 +2987,7 @@ MonoBehaviour:
   SnakeSensitivity: 300
   SnakeSideForceMax: 1000
   ForwardVelocity: 10
+  CheckSine: 0
   ThrowForce: {x: 0, y: 0, z: 0}
   Collide: 0
 --- !u!114 &2131241721
@@ -3001,7 +3002,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d9e6b2d268a04a4e8fc141fba5620f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Snake: {fileID: 2131241716}
+  Head: {fileID: 1993690720}
+  Snake: {fileID: 2131241720}
   HeadDiameter: 1
   GhostPlayer: {fileID: 912858607}
 --- !u!1001 &3846772448003053115

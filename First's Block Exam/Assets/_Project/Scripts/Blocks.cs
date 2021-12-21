@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Blocks : MonoBehaviour
 {
-    private int HP = 2;
+    private int HP = 10;
    
     public bool GetDamage()
     {
