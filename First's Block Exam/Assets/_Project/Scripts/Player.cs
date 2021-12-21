@@ -39,15 +39,15 @@ public class Player : MonoBehaviour
     private void SnakeHeadMovement()
     {
         SnakeHead.velocity = Vector3.forward * ForwardVelocity * Time.deltaTime;
-        if (GetOnPlatformPosition(Input.mousePosition).x < 13.5f || GetOnPlatformPosition(Input.mousePosition).x > 16.9f) return;
+        float mousePosition = GetOnPlatformPosition(Input.mousePosition).x;
+        if (mousePosition < 13.5f) mousePosition = 13.5f;
+        if (mousePosition > 16.9f) mousePosition = 16.9f;
         if (Input.GetMouseButton(0))
         {
-            float deltaX = Mathf.InverseLerp(13.6f, 16.9f, GetOnPlatformPosition(Input.mousePosition).x);
+            float deltaX = Mathf.InverseLerp(13.6f, 16.9f, mousePosition);
             float targetX = Mathf.Lerp(0.5f, 29.5f, deltaX);
             Vector3 currentSideForce = (new Vector3(targetX, 0, 0) - new Vector3(SnakeHead.position.x, 0, 0)) * SnakeSensitivity;
-            
             if (Mathf.Abs(currentSideForce.x) > SnakeSideForceMax) currentSideForce.x = Mathf.Sign(currentSideForce.x) * SnakeSideForceMax;
-            Debug.Log(currentSideForce);
             SnakeHead.AddForce(currentSideForce);
         }
     }
