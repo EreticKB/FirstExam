@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -8,6 +6,11 @@ public class Player : MonoBehaviour
     public float SnakeSensitivity;
     public float SnakeSideForceMax;
     public float ForwardVelocity;
+
+    
+    private float _timer = 3f;
+    [HideInInspector] public Vector3 ThrowForce;
+    [HideInInspector] public bool Collide;
 
     private Body _body;
 
@@ -51,6 +54,7 @@ public class Player : MonoBehaviour
             Vector3 currentSideForce = (new Vector3(targetX, 0, 0) - new Vector3(SnakeHead.position.x, 0, 0)) * SnakeSensitivity;
             if (Mathf.Abs(currentSideForce.x) > SnakeSideForceMax) currentSideForce.x = Mathf.Sign(currentSideForce.x) * SnakeSideForceMax;
             SnakeHead.AddForce(currentSideForce);
+            ThrowForce = currentSideForce;
         }
     }
 
@@ -59,6 +63,17 @@ public class Player : MonoBehaviour
         return Camera.main.ScreenToWorldPoint(new Vector3(rawPosition.x, rawPosition.y, 2f));
     }
 
-
-    
+    private void OnCollisionStay(Collision collision)
+    {
+        if (!collision.collider.TryGetComponent(out Blocks bloks)) return;
+        Vector3 collisionNormal = -collision.contacts[0].normal.normalized;
+        float dot = Vector3.Dot(collisionNormal, Vector3.forward);
+        if (dot < 0.88f) return;
+        _timer -= Time.deltaTime;
+        if (_timer >= 0) return;
+        _timer = 5f;
+        Collide = bloks.GetDamage();
+        if (Collide) Debug.Log("It's still alive");
+        else Debug.Log("It's dead");
+    }
 }

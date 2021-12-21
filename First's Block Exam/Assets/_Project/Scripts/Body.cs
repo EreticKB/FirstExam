@@ -3,8 +3,12 @@ using UnityEngine;
 
 public class Body : MonoBehaviour
 {
-    public Transform Head;
+    public GameObject Snake;
+    private Transform _head;
+    private Player _player;
     public float HeadDiameter;
+    public GhostPlayer GhostPlayer;
+
    
 
     private LinkedListNode<Vector3> _linkedListLNode;
@@ -13,21 +17,30 @@ public class Body : MonoBehaviour
 
     private void Awake()
     {
-        _positions.AddLast(Head.position);
+        _player = Snake.GetComponent<Player>();
+        _head = Snake.GetComponent<Transform>();
+        _positions.AddLast(_head.position);
     }
 
     private void Update()
     {
-        float distance = (Head.position - _positions.First.Value).magnitude;//рассчет направления от старой позиции к новой
+        float distance = (_head.position - _positions.First.Value).magnitude;//рассчет направления от старой позиции к новой
         if (distance > HeadDiameter) //если вышли за диаметр головы надо положить в список новую позицию головы и удалить устаревшую последнюю позицию
         {
-            Vector3 direction = (Head.position - _positions.First.Value).normalized;
+            Vector3 direction = (_head.position - _positions.First.Value).normalized;
             _positions.AddFirst(_positions.First.Value + direction * HeadDiameter);
             _positions.RemoveLast();
             distance -= HeadDiameter; //чтобы не уйти далеко за 1 и не было рывка.
         }
 
         _linkedListLNode = _positions.First;
+
+        if (_player.Collide)
+        {
+            distance = GhostPlayer.Distance;
+            if (distance / HeadDiameter >= 0.9f) RetractSnake();
+        }
+            
         foreach (Transform segment in _segments)
         {
             segment.position = Vector3.Lerp(_linkedListLNode.Next.Value, _linkedListLNode.Value, distance / HeadDiameter);
@@ -36,7 +49,7 @@ public class Body : MonoBehaviour
     }
     public void ExtendSnake()
     {
-        Transform segment = Instantiate(Head, _positions.Last.Value, Quaternion.identity, transform);
+        Transform segment = Instantiate(_head, _positions.Last.Value, Quaternion.identity, transform);
         _segments.AddLast(segment);
         _positions.AddLast(segment.position);
     }
