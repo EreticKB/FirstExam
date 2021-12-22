@@ -1,12 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Game : MonoBehaviour
 {
+    public Body Body; //нужна для извелечения длины змеи.
     public GameObject[] Platforms = new GameObject[6];
     private GameObject[] _platformPool = new GameObject[6];
+    public List<int> PlatformAvaibility { get; private set; } = new List<int>();
     public Transform Level;
-    public Material GroundColor;
-    private Vector3 _platformOffSet = new Vector3(0,0,70);
 
     private void Awake()
     {
@@ -14,20 +15,41 @@ public class Game : MonoBehaviour
         for (int i = 0; i < Platforms.Length; i++)
         {
             _platformPool[i] = Instantiate(Platforms[i], new Vector3(0, 0, 0), Quaternion.identity, Level);
-            _platformPool[i].GetComponent<PlaneControl>().SpawnPlatform.Game = this;
-            if (i > 0) _platformPool[i].SetActive(false);
+            PlaneControl platform = _platformPool[i].GetComponent<PlaneControl>();
+            platform.Game = this;
+            PushPlatform(i);
         }
+        PullPlatform(0, -1, 0, 4);
     }
 
-    public void PullPlatform(int index)
+
+    public void PullPlatform(int poolIndex, int previousPlatformPoolIndex, int platformPositionIndex, int size)
     {
-        _platformPool[index].transform.position = _platformOffSet * index;
-        _platformPool[index].SetActive(true);
+        if (!PlatformAvaibility.Contains(poolIndex))
+        {
+            Debug.Log("Платформа занята.");
+            return;
+        }
+        _platformPool[poolIndex].SetActive(true);
+        _platformPool[poolIndex].GetComponent<PlaneControl>().ActivatePlatform(previousPlatformPoolIndex, platformPositionIndex, size);
+        PlatformAvaibility.Remove(poolIndex);
     }
 
-    public void PushPlatform(int index)
+    public void PullPlatform(int poolIndex,int previousPlatformPoolIndex, int platformPositionIndex)
     {
-        if (index < 0) return;
-        _platformPool[index].SetActive(false);
+        PullPlatform(poolIndex, previousPlatformPoolIndex, platformPositionIndex, Body.Size);
     }
+
+    
+
+    public void PushPlatform(int poolIndex)
+    {
+        if (poolIndex == -1) return;
+        if (PlatformAvaibility.Contains(poolIndex)) return;
+        _platformPool[poolIndex].GetComponent<PlaneControl>().DeActivatePlatform();
+        _platformPool[poolIndex].SetActive(false);
+        PlatformAvaibility.Add(poolIndex);
+    }
+
+
 }

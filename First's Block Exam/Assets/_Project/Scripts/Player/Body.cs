@@ -6,7 +6,6 @@ public class Body : MonoBehaviour
     public Transform Head;
     public Transform Tail;
     public TextMesh Text;
-    private float _size = 0;
     private Transform _headTwo;
     public Player Snake;
     public float HeadDiameter;
@@ -15,6 +14,8 @@ public class Body : MonoBehaviour
     private LinkedListNode<Vector3> _linkedListLNode;
     private LinkedList<Transform> _segments = new LinkedList<Transform>();
     private LinkedList<Vector3> _positions = new LinkedList<Vector3>();
+
+    [HideInInspector] public int Size { get; private set; } = 4;
 
     private void Awake()
     {
@@ -55,19 +56,19 @@ public class Body : MonoBehaviour
         Transform segment = Instantiate(Tail, _positions.Last.Value, Quaternion.identity, transform);
         _segments.AddLast(segment);
         _positions.AddLast(segment.position);
-        _size++;
-        Text.text = _size.ToString();
+        Size++;
+        Text.text = Size.ToString();
     }
 
     public void RetractSnake(bool isStay)
     {
-        if (_size == 0f)
+        if (Size == 0f)
         {
             gameObject.GetComponent<Player>().Die();
             return;
         }
-        _size--;
-        Text.text = _size.ToString();
+        Size--;
+        Text.text = Size.ToString();
         Destroy(_segments.First.Value.gameObject);
         _segments.RemoveFirst();
         if (isStay) _positions.RemoveLast();

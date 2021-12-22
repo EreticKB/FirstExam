@@ -2,11 +2,9 @@ using UnityEngine;
 
 public class SpawnPlatform : MonoBehaviour
 {
-    public Game Game;
-    public int Index;
+    public PlaneControl ParentPlatform;
     private void OnTriggerEnter(Collider other)
     {
-        Game.PullPlatform(Index + 1);
-        Game.PushPlatform(Index - 2);   
+        ParentPlatform.TriggerSprung();
     }
 }

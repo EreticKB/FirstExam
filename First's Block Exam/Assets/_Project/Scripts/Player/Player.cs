@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < 10; i++) _body.ExtendSnake();
+       for (int i = 0; i < 4; i++) _body.ExtendSnake();
     }
     private void Update()
     {

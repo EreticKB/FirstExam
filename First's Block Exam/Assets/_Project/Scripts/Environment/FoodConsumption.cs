@@ -1,11 +1,12 @@
 using UnityEngine;
+using Assets._Project.Scripts.Environment;
 
-public class FoodConsumption : MonoBehaviour
+public class FoodConsumption : MonoBehaviour, IObjectsInteractable
 {
     public GameObject[] forms;
     public int _value = 3;
     public TextMesh Text;
-    
+
 
     private void Awake()
     {
@@ -13,7 +14,7 @@ public class FoodConsumption : MonoBehaviour
     }
     private void Start()
     {
-        Text.text = _value.ToString();   
+        Text.text = _value.ToString();
     }
 
 
@@ -21,7 +22,13 @@ public class FoodConsumption : MonoBehaviour
     {
         if (!other.TryGetComponent(out Body body)) return;
         for (int i = 0; i < _value; i++) body.ExtendSnake();
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
+    public void Refresh(int quality)
+    {
+        if (quality == 1) _value = Random.Range(1, 10);
+        if (quality == 2) _value = Random.Range(1, 18);
+        if (quality == 3) _value = Random.Range(8, 15);
+    }
 }

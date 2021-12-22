@@ -1,15 +1,25 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlaneControl : MonoBehaviour
 {
+    public bool IsStartPlatform;
+    private int _platformPositionIndex = 0;
+    public Game Game;
+    public int PlatformPoolIndex;
+    private int _previousPlatformPoolIndex = -1;
+    private int _obsoletePlatformPoolIndex;
+
 
     public GameObject[] Foods = new GameObject[6];
     int[] _foodQuality = new int[6];
     FoodConsumption[] _foodScript = new FoodConsumption[6];
 
-    public GameObject[] Blocks = new GameObject[12];
-    int[] _blockquality = new int[12];
-    Blocks[] _blockScript = new Blocks[12];
+    public GameObject[] Blocks = new GameObject[13];
+    int[] _blockQuality = new int[13];
+    Blocks[] _blockScript = new Blocks[13];
+
 
     private void Awake()
     {
@@ -23,5 +33,62 @@ public class PlaneControl : MonoBehaviour
             _blockScript[i] = Blocks[i].GetComponent<Blocks>();
         }
     }
-    public SpawnPlatform SpawnPlatform;
+
+    public void TriggerSprung()
+    {
+        Debug.Log("Obsolete: "+_obsoletePlatformPoolIndex);
+        Debug.Log("Previous: " + _previousPlatformPoolIndex);
+        Debug.Log("Position: " + _platformPositionIndex);
+        Game.PullPlatform(GetNextPlatformPoolIndex(Game.PlatformAvaibility), PlatformPoolIndex, _platformPositionIndex+1);
+        Game.PushPlatform(_obsoletePlatformPoolIndex);
+    }
+
+    public void ActivatePlatform(int previousPlatformPoolIndex, int platformPositionIndex, int size)
+    {
+        _obsoletePlatformPoolIndex = _previousPlatformPoolIndex;
+        _previousPlatformPoolIndex = previousPlatformPoolIndex;
+        _platformPositionIndex = platformPositionIndex;
+        //отключаем 3 сложных блока для стартового типа платформы
+        if (IsStartPlatform)
+        {
+            for (int i = 10; i < 13; i++) Blocks[i].SetActive(false);
+        }
+        //смещаем платформу на нужную позицию согласно ее вызванному номеру
+        transform.position = new Vector3(0, 0, platformPositionIndex * 70);
+        //назначаем качество еды и препятствий
+        for (int i = 0; i < _blockQuality.Length; i++) _blockQuality[i] = 2;
+        for (int i = 10; i < _blockQuality.Length; i++) _blockQuality[i] = 4;
+        for (int i = 0; i < _foodQuality.Length; i++) _foodQuality[i] = 2;
+        RandomQuality(_blockQuality, 0,4,2,2);
+        RandomQuality(_blockQuality, 5, 9, 7, 2);
+        RandomQuality(_foodQuality, 0, _foodQuality.Length, 3, 2);
+        //обновляем блоки согласно качеству.
+        for (int i = 0; i < _blockQuality.Length; i++) _blockScript[i].Refresh(_blockQuality[i], size);
+        for (int i = 0; i < _foodQuality.Length; i++) _foodScript[i].Refresh(_blockQuality[i]);
+    }
+
+    private void RandomQuality(int[] array, int min, int max, int shiftPoint, int shiftValue)
+    {
+        array[Random.Range(min, max)] = 3;
+        int randomIndex = Random.Range(min, max);
+        if (array[randomIndex] == 3)
+        {
+            if (randomIndex < shiftPoint) randomIndex += shiftValue;
+            else randomIndex -= shiftValue;
+        }
+        array[randomIndex] = 1;
+    }
+
+    private int GetNextPlatformPoolIndex(List<int> list)
+    {
+        int index = Random.Range(0, list.Count - 1);
+        Debug.Log("Next Platform Index:" + list.ElementAt(index));
+        return list.ElementAt(index);
+    }
+
+    public void DeActivatePlatform()
+    {
+        for (int i = 0; i < Foods.Length; i++) Foods[i].SetActive(true);
+        for (int i = 0; i < Blocks.Length; i++) Blocks[i].SetActive(true);
+    }
 }
