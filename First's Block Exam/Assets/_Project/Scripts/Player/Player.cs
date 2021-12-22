@@ -1,18 +1,24 @@
+using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public Game Game;
     public Rigidbody SnakeHead;
     public float SnakeSensitivity;
     public float SnakeSideForceMax;
     public float ForwardVelocity;
     private Collision _currentBlock;
-
+    public ParticleSystem RamParticles;
+    public ParticleSystem DeathParticles;
+    public AudioSource Hit;
+    public AudioSource Death;
 
     [HideInInspector] public Vector3 ThrowForce;
     [HideInInspector] public bool Collide;
 
     private Body _body;
+    private float _delay = 1f;
 
     private void Awake()
     {
@@ -21,18 +27,12 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-       for (int i = 0; i < 4; i++) _body.ExtendSnake();
+        for (int i = 0; i < 4; i++) _body.ExtendSnake();
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            _body.ExtendSnake();
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            _body.RetractSnake(true);
-        }
+        if (Input.GetKeyDown(KeyCode.A)) Hit.Play();
+        if (Input.GetKeyDown(KeyCode.D)) Death.Play();
     }
     void FixedUpdate()
     {
@@ -43,6 +43,11 @@ public class Player : MonoBehaviour
 
     private void SnakeHeadMovement()
     {
+        if (Game.CurrentState != Game.State.Playing)
+        {
+            SnakeHead.velocity = Vector3.zero;
+            return;
+        }
         SnakeHead.velocity = Vector3.forward * ForwardVelocity;
         float mousePosition = GetOnPlatformPosition(Input.mousePosition).x;
         if (mousePosition < 13.5f) mousePosition = 13.5f;
@@ -65,8 +70,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        if (Collide) return;
-        if (_currentBlock==null) _currentBlock = collision;
+        if (_currentBlock == null) _currentBlock = collision;
         if (!_currentBlock.collider.TryGetComponent(out Blocks bloks))
         {
             _currentBlock = null;
@@ -79,6 +83,9 @@ public class Player : MonoBehaviour
             _currentBlock = null;
             return;
         }
+        if (Game.CurrentState == Game.State.Playing) RamParticles.Play();
+        if (Collide) return;
+        if (Game.CurrentState == Game.State.Playing) Hit.Play();
         Collide = bloks.GetDamage();
     }
 
@@ -91,6 +98,18 @@ public class Player : MonoBehaviour
 
     public void Die()
     {
-        Debug.Log("Snake dies");
+        if (Game.CurrentState != Game.State.Playing) return;
+        Game.WaitDeath();
+        DeathParticles.Play();
+        _body.DisableHead();
+        Death.Play();
+        StartCoroutine(DeathOfPlayer());
+    }
+
+    IEnumerator DeathOfPlayer()
+    {
+        yield return new WaitForSeconds(2);
+        gameObject.SetActive(false);
+        Game.ShowMenu();
     }
 }

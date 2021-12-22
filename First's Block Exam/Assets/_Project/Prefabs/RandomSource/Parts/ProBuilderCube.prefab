@@ -1001,4 +1001,5 @@ MonoBehaviour:
   - {fileID: 2100000, guid: b9eb83207ffd7e64b87e02a8d91e9827, type: 2}
   - {fileID: 2100000, guid: 2b6baa6ddca4bd84ea81b96c9389197b, type: 2}
   - {fileID: 2100000, guid: d2fdcbaea61300840b86dcfe9003f453, type: 2}
+  Renderer: {fileID: 8907453140458661046}
   Text: {fileID: 859154412725114865}

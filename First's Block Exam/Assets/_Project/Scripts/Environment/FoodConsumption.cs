@@ -3,14 +3,14 @@ using Assets._Project.Scripts.Environment;
 
 public class FoodConsumption : MonoBehaviour, IObjectsInteractable
 {
-    public GameObject[] forms;
+    public GameObject[] Forms = new GameObject[7];
     public int _value = 3;
     public TextMesh Text;
 
 
     private void Awake()
     {
-        forms[Random.Range(0, 6)].SetActive(true);
+        Forms[Random.Range(0, 6)].SetActive(true);
     }
     private void Start()
     {
@@ -30,5 +30,8 @@ public class FoodConsumption : MonoBehaviour, IObjectsInteractable
         if (quality == 1) _value = Random.Range(1, 10);
         if (quality == 2) _value = Random.Range(1, 18);
         if (quality == 3) _value = Random.Range(8, 15);
+        Text.text = _value.ToString();
+        foreach (GameObject form in Forms) form.SetActive(false);
+        Forms[Random.Range(0, 6)].SetActive(true);
     }
 }

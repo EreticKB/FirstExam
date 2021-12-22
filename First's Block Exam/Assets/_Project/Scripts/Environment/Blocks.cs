@@ -5,20 +5,19 @@ using Assets._Project.Scripts.Environment;
 public class Blocks : MonoBehaviour, IObjectsInteractable
 {
     public Material[] colors = new Material[6];
-    Renderer _renderer;
+    public Renderer Renderer;
     public TextMesh Text;
-    private int HP = 27;
+    private int HP;
 
     private void Start()
     {
         Text.text = (HP - 1).ToString();
-        _renderer = GetComponent<Renderer>();
-        _setColor(_renderer);
+        setColor(Renderer);
     }
     public bool GetDamage()
     {
         HP--;
-        _setColor(_renderer);
+        setColor(Renderer);
         Text.text = HP.ToString();
         if (HP > 0) return true;
         StartCoroutine(Death());
@@ -30,7 +29,7 @@ public class Blocks : MonoBehaviour, IObjectsInteractable
         gameObject.SetActive(false);
     }
 
-    private void _setColor(Renderer renderer)
+    private void setColor(Renderer renderer)
     {
         if (HP < 11) renderer.sharedMaterial = colors[0];
         else if (HP < 21) renderer.sharedMaterial = colors[1];
@@ -48,6 +47,8 @@ public class Blocks : MonoBehaviour, IObjectsInteractable
         if (quality == 3) HP = Random.Range(size / 2, size * 3 / 2);
         if (quality == 4) HP = Random.Range(1, size * 2);
         HP += 3;
+        Text.text = (HP - 1).ToString();
+        setColor(Renderer);
     }
     public void Refresh(int quality)
     {

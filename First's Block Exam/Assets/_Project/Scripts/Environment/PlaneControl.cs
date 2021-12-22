@@ -5,11 +5,9 @@ using UnityEngine;
 public class PlaneControl : MonoBehaviour
 {
     public bool IsStartPlatform;
-    private int _platformPositionIndex = 0;
+    private int _platformPositionIndex;
     public Game Game;
     public int PlatformPoolIndex;
-    private int _previousPlatformPoolIndex = -1;
-    private int _obsoletePlatformPoolIndex;
 
 
     public GameObject[] Foods = new GameObject[6];
@@ -36,17 +34,12 @@ public class PlaneControl : MonoBehaviour
 
     public void TriggerSprung()
     {
-        Debug.Log("Obsolete: "+_obsoletePlatformPoolIndex);
-        Debug.Log("Previous: " + _previousPlatformPoolIndex);
-        Debug.Log("Position: " + _platformPositionIndex);
+        Game.PushPlatform();
         Game.PullPlatform(GetNextPlatformPoolIndex(Game.PlatformAvaibility), PlatformPoolIndex, _platformPositionIndex+1);
-        Game.PushPlatform(_obsoletePlatformPoolIndex);
     }
 
-    public void ActivatePlatform(int previousPlatformPoolIndex, int platformPositionIndex, int size)
+    public void ActivatePlatform(int platformPositionIndex, int size)
     {
-        _obsoletePlatformPoolIndex = _previousPlatformPoolIndex;
-        _previousPlatformPoolIndex = previousPlatformPoolIndex;
         _platformPositionIndex = platformPositionIndex;
         //отключаем 3 сложных блока для стартового типа платформы
         if (IsStartPlatform)
@@ -82,7 +75,6 @@ public class PlaneControl : MonoBehaviour
     private int GetNextPlatformPoolIndex(List<int> list)
     {
         int index = Random.Range(0, list.Count - 1);
-        Debug.Log("Next Platform Index:" + list.ElementAt(index));
         return list.ElementAt(index);
     }
 

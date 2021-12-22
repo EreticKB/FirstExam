@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ public class Body : MonoBehaviour
     private LinkedList<Transform> _segments = new LinkedList<Transform>();
     private LinkedList<Vector3> _positions = new LinkedList<Vector3>();
 
-    [HideInInspector] public int Size { get; private set; } = 4;
+    [HideInInspector] public int Size { get; private set; }
 
     private void Awake()
     {
@@ -53,6 +54,7 @@ public class Body : MonoBehaviour
     }
     public void ExtendSnake()
     {
+        
         Transform segment = Instantiate(Tail, _positions.Last.Value, Quaternion.identity, transform);
         _segments.AddLast(segment);
         _positions.AddLast(segment.position);
@@ -62,7 +64,7 @@ public class Body : MonoBehaviour
 
     public void RetractSnake(bool isStay)
     {
-        if (Size == 0f)
+        if (Size < 1f)
         {
             gameObject.GetComponent<Player>().Die();
             return;
@@ -73,5 +75,10 @@ public class Body : MonoBehaviour
         _segments.RemoveFirst();
         if (isStay) _positions.RemoveLast();
         else _positions.Remove(_positions.First.Next);
+    }
+
+    public void DisableHead()
+    {
+        Head.gameObject.GetComponent<MeshRenderer>().enabled = false;
     }
 }
