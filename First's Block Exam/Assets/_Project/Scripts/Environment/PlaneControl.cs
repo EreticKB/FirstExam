@@ -4,20 +4,19 @@ using UnityEngine;
 
 public class PlaneControl : MonoBehaviour
 {
-    public bool IsStartPlatform;
-    private int _platformPositionIndex;
     public Game Game;
+    public bool IsStartPlatform;
     public int PlatformPoolIndex;
-
-
+    private int _platformPositionIndex;
+    //====================================
     public GameObject[] Foods = new GameObject[6];
     int[] _foodQuality = new int[6];
     FoodConsumption[] _foodScript = new FoodConsumption[6];
-
+    //====================================
     public GameObject[] Blocks = new GameObject[13];
     int[] _blockQuality = new int[13];
     Blocks[] _blockScript = new Blocks[13];
-
+    //====================================
 
     private void Awake()
     {

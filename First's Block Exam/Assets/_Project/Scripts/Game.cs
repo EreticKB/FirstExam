@@ -5,35 +5,14 @@ using UnityEngine;
 public class Game : MonoBehaviour
 {
     public Body Body; //нужна для извелечения длины змеи.
-    private int _previousPlatformPoolIndex;
-    private int _obsoletePlatformPoolIndex;
-    public GameObject[] Platforms = new GameObject[6];
-    private GameObject[] _platformPool = new GameObject[6];
+    public MainMenu Menu;
     public List<int> PlatformAvaibility { get; private set; } = new List<int>();
     public Transform Level;
-    //Раздел под PlayerPrefs и взаимодействие с меню. И нет, я не собираюсь это удалять, чтобы не путаться в коде в дальнейшем.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public void ShowMenu()
-    {
-        CurrentState = State.Menu;
-    }
-
-    //======================================
+    public GameObject[] Platforms = new GameObject[6];
+    private GameObject[] _platformPool = new GameObject[6];
+    private int _previousPlatformPoolIndex;
+    private int _obsoletePlatformPoolIndex;
+    
     public enum State
     {
         Playing,
@@ -41,10 +20,45 @@ public class Game : MonoBehaviour
         DefeatDelay
     }
     public State CurrentState { get; private set; }
+    
+    private readonly string _bestIndex = "Best";
+    private readonly string _snakeSpeedIndex = "SnakeSpeed";
+    public int Best
+    {
+        get => PlayerPrefs.GetInt(_bestIndex, 0);
+        set
+        {
+            PlayerPrefs.SetInt(_bestIndex, value);
+            PlayerPrefs.Save();
+        }
+    }
+    public int SnakeSpeed
+    {
+        get => PlayerPrefs.GetInt(_snakeSpeedIndex, 10);
+        set
+        {
+            PlayerPrefs.SetInt(_snakeSpeedIndex, value);
+            PlayerPrefs.Save();
+        }
+    }
+    public void GameStart()
+    {
+        CurrentState = State.Playing;
+    }
+
+    public void ShowMenu()
+    {
+        bool isLost = false;
+        if (CurrentState == State.DefeatDelay) isLost = true;
+        if (CurrentState == State.Menu) return;
+        CurrentState = State.Menu;
+        Menu.ShowMenu(isLost);
+    }
 
     private void Awake()
     {
         CurrentState = State.Playing;
+        ShowMenu();
         _previousPlatformPoolIndex = -1;
         for (int i = 0; i < Platforms.Length; i++)
         {
@@ -96,5 +110,11 @@ public class Game : MonoBehaviour
     public void WaitDeath()
     {
         CurrentState = State.DefeatDelay;
+    }
+
+    internal void AmDead(int score)
+    {
+        if (score > Best) Best = score;
+        ShowMenu();
     }
 }

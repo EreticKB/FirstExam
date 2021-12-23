@@ -11,7 +11,7 @@ public class Blocks : MonoBehaviour, IObjectsInteractable
 
     private void Start()
     {
-        Text.text = (HP - 1).ToString();
+        Text.text = HP.ToString();
         setColor(Renderer);
     }
     public bool GetDamage()
@@ -47,7 +47,7 @@ public class Blocks : MonoBehaviour, IObjectsInteractable
         if (quality == 3) HP = Random.Range(size / 2, size * 3 / 2);
         if (quality == 4) HP = Random.Range(1, size * 2);
         HP += 3;
-        Text.text = (HP - 1).ToString();
+        Text.text = HP.ToString();
         setColor(Renderer);
     }
     public void Refresh(int quality)

@@ -1,9 +1,13 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     public Game Game;
+    public int Score = 0;
+    public Text ScoreScreen;
+    public Text ScoreMenu;
     public Rigidbody SnakeHead;
     public float SnakeSensitivity;
     public float SnakeSideForceMax;
@@ -13,12 +17,12 @@ public class Player : MonoBehaviour
     public ParticleSystem DeathParticles;
     public AudioSource Hit;
     public AudioSource Death;
+    private float moveDelay = .5f;
 
     [HideInInspector] public Vector3 ThrowForce;
     [HideInInspector] public bool Collide;
 
     private Body _body;
-    private float _delay = 1f;
 
     private void Awake()
     {
@@ -43,6 +47,11 @@ public class Player : MonoBehaviour
 
     private void SnakeHeadMovement()
     {
+        if (moveDelay > 0)
+        {
+            moveDelay -= Time.deltaTime;
+            return;
+        }
         if (Game.CurrentState != Game.State.Playing)
         {
             SnakeHead.velocity = Vector3.zero;
@@ -70,7 +79,11 @@ public class Player : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        if (_currentBlock == null) _currentBlock = collision;
+        if (Game.CurrentState != Game.State.Playing) return;
+            if (_currentBlock == null)
+        {
+            _currentBlock = collision;
+        }
         if (!_currentBlock.collider.TryGetComponent(out Blocks bloks))
         {
             _currentBlock = null;
@@ -83,10 +96,14 @@ public class Player : MonoBehaviour
             _currentBlock = null;
             return;
         }
-        if (Game.CurrentState == Game.State.Playing) RamParticles.Play();
+         RamParticles.Play();
         if (Collide) return;
-        if (Game.CurrentState == Game.State.Playing) Hit.Play();
+        Hit.Play();
         Collide = bloks.GetDamage();
+        _body.RetractSnake();
+        Score++;
+        ScoreScreen.text = Score.ToString();
+        ScoreMenu.text = "Score: " + Score.ToString();
     }
 
 
@@ -108,8 +125,8 @@ public class Player : MonoBehaviour
 
     IEnumerator DeathOfPlayer()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.5f);
+        Game.AmDead(Score);
         gameObject.SetActive(false);
-        Game.ShowMenu();
     }
 }

@@ -7,11 +7,11 @@ public class Body : MonoBehaviour
     public Transform Head;
     public Transform Tail;
     public TextMesh Text;
-    private Transform _headTwo;
     public Player Snake;
     public float HeadDiameter;
     public GhostPlayer GhostPlayer;
 
+    private Transform _headTwo;
     private LinkedListNode<Vector3> _linkedListLNode;
     private LinkedList<Transform> _segments = new LinkedList<Transform>();
     private LinkedList<Vector3> _positions = new LinkedList<Vector3>();
@@ -48,7 +48,6 @@ public class Body : MonoBehaviour
         }
         if (distance / HeadDiameter >= 1f && Snake.Collide)
         {
-            RetractSnake(true);
             Snake.Collide = false;
         }
     }
@@ -62,7 +61,7 @@ public class Body : MonoBehaviour
         Text.text = Size.ToString();
     }
 
-    public void RetractSnake(bool isStay)
+    public void RetractSnake()
     {
         if (Size < 1f)
         {
@@ -73,8 +72,8 @@ public class Body : MonoBehaviour
         Text.text = Size.ToString();
         Destroy(_segments.First.Value.gameObject);
         _segments.RemoveFirst();
-        if (isStay) _positions.RemoveLast();
-        else _positions.Remove(_positions.First.Next);
+        _positions.RemoveLast();
+        
     }
 
     public void DisableHead()
