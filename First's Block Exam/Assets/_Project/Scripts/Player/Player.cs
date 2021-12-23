@@ -33,11 +33,7 @@ public class Player : MonoBehaviour
     {
         for (int i = 0; i < 4; i++) _body.ExtendSnake();
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A)) Hit.Play();
-        if (Input.GetKeyDown(KeyCode.D)) Death.Play();
-    }
+    
     void FixedUpdate()
     {
         SnakeHeadMovement();
