@@ -91,7 +91,10 @@ public class Game : MonoBehaviour
         PullPlatform(poolIndex, previousPlatformPoolIndex, platformPositionIndex, Body.Size);
     }
 
-    
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) AmDead(0);
+    }
 
     public void PushPlatform(int poolIndex)
     {
@@ -112,7 +115,7 @@ public class Game : MonoBehaviour
         CurrentState = State.DefeatDelay;
     }
 
-    internal void AmDead(int score)
+    public void AmDead(int score)
     {
         if (score > Best) Best = score;
         ShowMenu();
