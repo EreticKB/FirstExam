@@ -14740,13 +14740,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Game: {fileID: 620632923}
+  Ghost: {fileID: 912858607}
   Score: 0
   ScoreScreen: {fileID: 2144528168}
   ScoreMenu: {fileID: 598223309}
   SnakeHead: {fileID: 2131241718}
   SnakeSensitivity: 400
   SnakeSideForceMax: 2000
-  ForwardVelocity: 15
   RamParticles: {fileID: 146551367}
   DeathParticles: {fileID: 909860346}
   Hit: {fileID: 2131241722}

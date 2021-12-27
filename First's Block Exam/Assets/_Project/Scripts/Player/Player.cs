@@ -5,13 +5,13 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     public Game Game;
+    public GhostPlayer Ghost;
     public int Score = 0;
     public Text ScoreScreen;
     public Text ScoreMenu;
     public Rigidbody SnakeHead;
     public float SnakeSensitivity;
     public float SnakeSideForceMax;
-    public float ForwardVelocity;
     private Collision _currentBlock;
     public ParticleSystem RamParticles;
     public ParticleSystem DeathParticles;
@@ -37,6 +37,8 @@ public class Player : MonoBehaviour
     void FixedUpdate()
     {
         SnakeHeadMovement();
+        Ghost.GhostHeadMovement((float)Game.SnakeSpeed, ThrowForce);
+
     }
 
 
@@ -54,7 +56,7 @@ public class Player : MonoBehaviour
             SnakeHead.velocity = Vector3.zero;
             return;
         }
-        SnakeHead.velocity = Vector3.forward * ForwardVelocity;
+        SnakeHead.velocity = Vector3.forward * Game.SnakeSpeed;
         float mousePosition = GetOnPlatformPosition(Input.mousePosition).x;
         if (mousePosition < 13.8f) mousePosition = 13.8f;
         if (mousePosition > 16.6f) mousePosition = 16.6f;

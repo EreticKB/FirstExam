@@ -11,11 +11,6 @@ public class GhostPlayer : MonoBehaviour
     {
         _snakeHead = GetComponent<Rigidbody>();
     }
-
-    void FixedUpdate()
-    {
-        GhostHeadMovement();
-    }
     private void Update()
     {
         float distance = (_snakeHead.position - Position).magnitude;
@@ -28,10 +23,10 @@ public class GhostPlayer : MonoBehaviour
     }
 
 
-    private void GhostHeadMovement()
+    public void GhostHeadMovement(float velocity, Vector3 force)
     {
-        _snakeHead.velocity = Vector3.forward * SnakeHeadLink.ForwardVelocity;
-        _snakeHead.AddForce(SnakeHeadLink.ThrowForce);
+        _snakeHead.velocity = Vector3.forward * velocity;
+        _snakeHead.AddForce(force);
     }
 
 
