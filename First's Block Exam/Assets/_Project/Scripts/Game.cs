@@ -10,24 +10,20 @@ public class Game : MonoBehaviour
     public Player Player;
     public List<int> PlatformAvaibility { get; private set; } = new List<int>();
     public Transform Level;
+    public float MoveDelay = .5f;
+    public Text ScoreScreen;
+    public Text ScoreMenu;
     public GameObject[] Platforms = new GameObject[6];
     private GameObject[] _platformPool = new GameObject[6];
     private int _previousPlatformPoolIndex;
     private int _obsoletePlatformPoolIndex;
-
-    //Перенести из Player
-    public float MoveDelay = .5f;
     private int _score;
-    public Text ScoreScreen;
-    public Text ScoreMenu;
-
 
     public enum State
     {
         Playing,
         Menu,
-        DefeatDelay,
-        Wait
+        DefeatDelay
     }
     public State CurrentState { get; private set; }
     

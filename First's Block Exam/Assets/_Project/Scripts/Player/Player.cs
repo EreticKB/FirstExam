@@ -1,7 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
-
 public class Player : MonoBehaviour
 {
     public Game Game;
@@ -14,7 +12,6 @@ public class Player : MonoBehaviour
     private float _moveDelay;
     private readonly float SnakeSensitivity = 400f;
     private readonly float SnakeSideForceMax = 2000f;
-    private Collision _currentBlock;
     private Body _body;
 
 
@@ -39,7 +36,6 @@ public class Player : MonoBehaviour
 
     private void SnakeHeadMovement()
     {
-
         if (_moveDelay > 0)
         {
             _moveDelay -= Time.deltaTime;
@@ -75,22 +71,10 @@ public class Player : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         if (Game.CurrentState != Game.State.Playing) return;
-        if (_currentBlock == null)
-        {
-            _currentBlock = collision;
-        }
-        if (!_currentBlock.collider.TryGetComponent(out Blocks bloks))
-        {
-            _currentBlock = null;
-            return;
-        }
-        Vector3 collisionNormal = -_currentBlock.contacts[0].normal.normalized;
+        if (!collision.collider.TryGetComponent(out Blocks bloks)) return;
+        Vector3 collisionNormal = -collision.contacts[0].normal.normalized;
         float dot = Vector3.Dot(collisionNormal, Vector3.forward);
-        if (dot < 0.9f)
-        {
-            _currentBlock = null;
-            return;
-        }
+        if (dot < 0.9f) return;
         RamParticles.Play();
         if (_body.Collide) return;
         Hit.Play();
@@ -98,14 +82,6 @@ public class Player : MonoBehaviour
         _body.RetractSnake();
         Game.AddScore();
     }
-
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (!collision.collider.TryGetComponent(out Blocks bloks)) return;
-        _currentBlock = null;
-    }
-
     public void Die()
     {
         if (Game.CurrentState != Game.State.Playing) return;
