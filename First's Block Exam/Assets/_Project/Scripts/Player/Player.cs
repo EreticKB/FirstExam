@@ -6,23 +6,18 @@ public class Player : MonoBehaviour
 {
     public Game Game;
     public GhostPlayer Ghost;
-    public int Score;
-    public Text ScoreScreen;
-    public Text ScoreMenu;
     public Rigidbody SnakeHead;
-    public float SnakeSensitivity;
-    public float SnakeSideForceMax;
-    private Collision _currentBlock;
     public ParticleSystem RamParticles;
     public ParticleSystem DeathParticles;
     public AudioSource Hit;
     public AudioSource Death;
-    private float moveDelay = .5f;
-
-    [HideInInspector] public Vector3 ThrowForce;
-    [HideInInspector] public bool Collide;
-
+    private float _moveDelay;
+    private readonly float SnakeSensitivity = 400f;
+    private readonly float SnakeSideForceMax = 2000f;
+    private Collision _currentBlock;
     private Body _body;
+
+
 
     private void Awake()
     {
@@ -32,23 +27,22 @@ public class Player : MonoBehaviour
     private void Start()
     {
         for (int i = 0; i < 4; i++) _body.ExtendSnake();
+        _moveDelay = Game.MoveDelay;
     }
-    
+
     void FixedUpdate()
     {
         SnakeHeadMovement();
-        Ghost.GhostHeadMovement((float)Game.SnakeSpeed, ThrowForce);
-
     }
 
 
 
     private void SnakeHeadMovement()
     {
-        
-        if (moveDelay > 0)
+
+        if (_moveDelay > 0)
         {
-            moveDelay -= Time.deltaTime;
+            _moveDelay -= Time.deltaTime;
             return;
         }
         if (Game.CurrentState != Game.State.Playing)
@@ -57,6 +51,7 @@ public class Player : MonoBehaviour
             return;
         }
         SnakeHead.velocity = Vector3.forward * Game.SnakeSpeed;
+        Ghost.GhostHeadMovement(Game.SnakeSpeed);
         float mousePosition = GetOnPlatformPosition(Input.mousePosition).x;
         if (mousePosition < 13.8f) mousePosition = 13.8f;
         if (mousePosition > 16.6f) mousePosition = 16.6f;
@@ -67,8 +62,9 @@ public class Player : MonoBehaviour
             Vector3 currentSideForce = (new Vector3(targetX, 0, 0) - new Vector3(SnakeHead.position.x, 0, 0)) * SnakeSensitivity;
             if (Mathf.Abs(currentSideForce.x) > SnakeSideForceMax) currentSideForce.x = Mathf.Sign(currentSideForce.x) * SnakeSideForceMax;
             SnakeHead.AddForce(currentSideForce);
-            ThrowForce = currentSideForce;
+            Ghost.GhostHeadSideForce(currentSideForce);
         }
+        
     }
 
     private Vector3 GetOnPlatformPosition(Vector3 rawPosition)
@@ -79,7 +75,7 @@ public class Player : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         if (Game.CurrentState != Game.State.Playing) return;
-            if (_currentBlock == null)
+        if (_currentBlock == null)
         {
             _currentBlock = collision;
         }
@@ -95,14 +91,12 @@ public class Player : MonoBehaviour
             _currentBlock = null;
             return;
         }
-         RamParticles.Play();
-        if (Collide) return;
+        RamParticles.Play();
+        if (_body.Collide) return;
         Hit.Play();
-        Collide = bloks.GetDamage();
+        _body.Collide = bloks.GetDamage();
         _body.RetractSnake();
-        Score++;
-        ScoreScreen.text = Score.ToString();
-        ScoreMenu.text = "Score: " + Score.ToString();
+        Game.AddScore();
     }
 
 
@@ -125,7 +119,7 @@ public class Player : MonoBehaviour
     IEnumerator DeathOfPlayer()
     {
         yield return new WaitForSeconds(1.5f);
-        Game.AmDead(Score);
+        Game.AmDead();
         gameObject.SetActive(false);
     }
 }

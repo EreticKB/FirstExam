@@ -26,9 +26,12 @@ public class GhostPlayer : MonoBehaviour
         return distance;
     }
 
-    public void GhostHeadMovement(float velocity, Vector3 force)
+    public void GhostHeadMovement(float velocity)
     {
         _snakeHead.velocity = Vector3.forward * velocity;
+    }
+    public void GhostHeadSideForce(Vector3 force)
+    {
         _snakeHead.AddForce(force);
     }
 

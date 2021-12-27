@@ -6239,6 +6239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Body: {fileID: 2131241721}
   Menu: {fileID: 996715800}
+  Player: {fileID: 2131241720}
   Level: {fileID: 1706404493}
   Platforms:
   - {fileID: 1932479301544231408, guid: 2d9c706f2b8f3514f85bcf0400c96132, type: 3}
@@ -6247,6 +6248,8 @@ MonoBehaviour:
   - {fileID: 4146073216416144663, guid: 63734aedab0714e4db8e79a52fa5d947, type: 3}
   - {fileID: 447508424622047823, guid: efe8ecde0b87856458eda1acaab2a177, type: 3}
   - {fileID: 5084222376815943971, guid: b53a67bf84149c241a42248b35e8b150, type: 3}
+  ScoreScreen: {fileID: 2144528168}
+  ScoreMenu: {fileID: 598223309}
 --- !u!1 &624408638
 GameObject:
   m_ObjectHideFlags: 0
@@ -14741,12 +14744,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Game: {fileID: 620632923}
   Ghost: {fileID: 912858607}
-  Score: 0
-  ScoreScreen: {fileID: 2144528168}
-  ScoreMenu: {fileID: 598223309}
   SnakeHead: {fileID: 2131241718}
-  SnakeSensitivity: 400
-  SnakeSideForceMax: 2000
   RamParticles: {fileID: 146551367}
   DeathParticles: {fileID: 909860346}
   Hit: {fileID: 2131241722}

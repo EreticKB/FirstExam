@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
@@ -15,13 +16,18 @@ public class Game : MonoBehaviour
     private int _obsoletePlatformPoolIndex;
 
     //Перенести из Player
+    public float MoveDelay = .5f;
+    private int _score;
+    public Text ScoreScreen;
+    public Text ScoreMenu;
 
-    
+
     public enum State
     {
         Playing,
         Menu,
-        DefeatDelay
+        DefeatDelay,
+        Wait
     }
     public State CurrentState { get; private set; }
     
@@ -73,8 +79,14 @@ public class Game : MonoBehaviour
             PushPlatform(i);
         }
         PullPlatform(0, -1, 0, 4);
+        UpdateMenu();
     }
 
+    private void UpdateMenu()
+    {
+        ScoreScreen.text = _score.ToString();
+        ScoreMenu.text = $"Score: {_score}";
+    }
 
     public void PullPlatform(int poolIndex, int previousPlatformPoolIndex, int platformPositionIndex, int size)
     {
@@ -95,9 +107,15 @@ public class Game : MonoBehaviour
         PullPlatform(poolIndex, previousPlatformPoolIndex, platformPositionIndex, Body.Size);
     }
 
+    public void AddScore()
+    {
+        _score++;
+        UpdateMenu();
+    }
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) AmDead(0);
+        if (Input.GetKeyDown(KeyCode.Escape)) AmDead();
     }
 
     public void PushPlatform(int poolIndex)
@@ -119,9 +137,9 @@ public class Game : MonoBehaviour
         CurrentState = State.DefeatDelay;
     }
 
-    public void AmDead(int score)
+    public void AmDead()
     {
-        if (score > Best) Best = score;
+        if (_score > Best) Best = _score;
         ShowMenu();
     }
 }
