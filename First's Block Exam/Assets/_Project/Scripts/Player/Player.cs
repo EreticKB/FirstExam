@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     public Game Game;
     public GhostPlayer Ghost;
-    public int Score = 0;
+    public int Score;
     public Text ScoreScreen;
     public Text ScoreMenu;
     public Rigidbody SnakeHead;

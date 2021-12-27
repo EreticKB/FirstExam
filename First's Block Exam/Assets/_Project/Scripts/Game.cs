@@ -6,12 +6,16 @@ public class Game : MonoBehaviour
 {
     public Body Body; //нужна для извелечения длины змеи.
     public MainMenu Menu;
+    public Player Player;
     public List<int> PlatformAvaibility { get; private set; } = new List<int>();
     public Transform Level;
     public GameObject[] Platforms = new GameObject[6];
     private GameObject[] _platformPool = new GameObject[6];
     private int _previousPlatformPoolIndex;
     private int _obsoletePlatformPoolIndex;
+
+    //Перенести из Player
+
     
     public enum State
     {

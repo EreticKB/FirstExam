@@ -36,9 +36,9 @@ public class Body : MonoBehaviour
         }
         if (Snake.Collide) //чтобы двигать хвост, когда уперлись в блок.
         {
-            distance = (_headTwo.position - GhostPlayer.Position).magnitude;
-            if (distance > HeadDiameter) distance = HeadDiameter;
+            distance = GhostPlayer.GetGhostDistance();            
         }
+        else GhostPlayer.GetGhostDistance();
 
         _linkedListLNode = _positions.First;
         foreach (Transform segment in _segments)
