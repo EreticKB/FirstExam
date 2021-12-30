@@ -21,7 +21,7 @@ public class FoodConsumption : MonoBehaviour, IObjectsInteractable
     private void OnTriggerEnter(Collider other)
     {
         if (!other.TryGetComponent(out Body body)) return;
-        for (int i = 0; i < _value; i++) body.ExtendSnake();
+        for (int i = 0; i < _value; i++) body.ExtendSnake(false);
         gameObject.SetActive(false);
     }
 

@@ -6241,6 +6241,9 @@ MonoBehaviour:
   Menu: {fileID: 996715800}
   Player: {fileID: 2131241720}
   Level: {fileID: 1706404493}
+  MoveDelay: 0.5
+  ScoreScreen: {fileID: 2144528168}
+  ScoreMenu: {fileID: 598223309}
   Platforms:
   - {fileID: 1932479301544231408, guid: 2d9c706f2b8f3514f85bcf0400c96132, type: 3}
   - {fileID: 7439019044136386170, guid: 887a3fe177d38e7468cca705b7366353, type: 3}
@@ -6248,8 +6251,6 @@ MonoBehaviour:
   - {fileID: 4146073216416144663, guid: 63734aedab0714e4db8e79a52fa5d947, type: 3}
   - {fileID: 447508424622047823, guid: efe8ecde0b87856458eda1acaab2a177, type: 3}
   - {fileID: 5084222376815943971, guid: b53a67bf84149c241a42248b35e8b150, type: 3}
-  ScoreScreen: {fileID: 2144528168}
-  ScoreMenu: {fileID: 598223309}
 --- !u!1 &624408638
 GameObject:
   m_ObjectHideFlags: 0
@@ -12393,7 +12394,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 1
+  m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -14431,6 +14432,7 @@ GameObject:
   - component: {fileID: 1993690720}
   - component: {fileID: 1993690723}
   - component: {fileID: 1993690722}
+  - component: {fileID: 1993690721}
   m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
@@ -14452,6 +14454,102 @@ Transform:
   m_Father: {fileID: 2131241717}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1993690721
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993690719}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: ac6034ade498bb94b87620cdf6eac48b, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.5
+  m_Pitch: 1.7
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!23 &1993690722
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14749,8 +14847,6 @@ MonoBehaviour:
   DeathParticles: {fileID: 909860346}
   Hit: {fileID: 2131241722}
   Death: {fileID: 2131241723}
-  ThrowForce: {x: 0, y: 0, z: 0}
-  Collide: 0
 --- !u!114 &2131241721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14766,9 +14862,10 @@ MonoBehaviour:
   Head: {fileID: 1993690720}
   Tail: {fileID: 8783601237708570866, guid: fc2b6c2dd60e58048863368685ba38a4, type: 3}
   Text: {fileID: 253436931}
-  Snake: {fileID: 2131241720}
   HeadDiameter: 1
   GhostPlayer: {fileID: 912858607}
+  Collide: 0
+  Eat: {fileID: 1993690721}
 --- !u!82 &2131241722
 AudioSource:
   m_ObjectHideFlags: 0

@@ -17,15 +17,15 @@ public class SnakeSpeed : MonoBehaviour
         {
             check.isOn = false;
         }
-        if (snakeSpeed == 5) SpeedCheks[2].isOn = true;
-        if (snakeSpeed == 10) SpeedCheks[1].isOn = true;
-        if (snakeSpeed == 15) SpeedCheks[0].isOn = true;
+        if (snakeSpeed == 10) SpeedCheks[2].isOn = true;
+        if (snakeSpeed == 15) SpeedCheks[1].isOn = true;
+        if (snakeSpeed == 20) SpeedCheks[0].isOn = true;
     }
     public void SetSpeed(string name)
     {
-        if (name.Equals("Slow")) Menu.Game.SnakeSpeed = 5;
-        if (name.Equals("Normal")) Menu.Game.SnakeSpeed = 10;
-        if (name.Equals("Fast")) Menu.Game.SnakeSpeed = 15;
+        if (name.Equals("Slow")) Menu.Game.SnakeSpeed = 10;
+        if (name.Equals("Normal")) Menu.Game.SnakeSpeed = 15;
+        if (name.Equals("Fast")) Menu.Game.SnakeSpeed = 20;
         SetCheckBox(Menu.Game.SnakeSpeed);
     }
 }

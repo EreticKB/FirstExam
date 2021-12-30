@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < 4; i++) _body.ExtendSnake();
+        for (int i = 0; i < 4; i++) _body.ExtendSnake(true);
         _moveDelay = Game.MoveDelay;
     }
 

@@ -13,6 +13,7 @@ public class Body : MonoBehaviour
     private LinkedListNode<Vector3> _linkedListLNode;
     private LinkedList<Transform> _segments = new LinkedList<Transform>();
     private LinkedList<Vector3> _positions = new LinkedList<Vector3>();
+    public AudioSource Eat;
 
     [HideInInspector] public int Size { get; private set; }
 
@@ -48,14 +49,14 @@ public class Body : MonoBehaviour
             Collide = false;
         }
     }
-    public void ExtendSnake()
+    public void ExtendSnake(bool start)
     {
-        
         Transform segment = Instantiate(Tail, _positions.Last.Value, Quaternion.identity, transform);
         _segments.AddLast(segment);
         _positions.AddLast(segment.position);
         Size++;
         Text.text = Size.ToString();
+        if (!start) Eat.Play();
     }
 
     public void RetractSnake()

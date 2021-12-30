@@ -40,7 +40,7 @@ public class Game : MonoBehaviour
     }
     public int SnakeSpeed
     {
-        get => PlayerPrefs.GetInt(_snakeSpeedIndex, 10);
+        get => PlayerPrefs.GetInt(_snakeSpeedIndex, 15);
         set
         {
             PlayerPrefs.SetInt(_snakeSpeedIndex, value);
