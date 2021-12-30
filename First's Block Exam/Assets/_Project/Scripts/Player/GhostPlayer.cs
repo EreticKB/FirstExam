@@ -12,26 +12,27 @@ public class GhostPlayer : MonoBehaviour
         _snakeHead = GetComponent<Rigidbody>();
     }
 
-    void FixedUpdate()
-    {
-        GhostHeadMovement();
-    }
-    private void Update()
+    public float GetGhostDistance()
     {
         float distance = (_snakeHead.position - Position).magnitude;
+
         if (distance > Body.HeadDiameter)
         {
             Vector3 direction = (_snakeHead.position - Position).normalized;
             distance -= Body.HeadDiameter;
             _snakeHead.position = Position + direction * distance;
+            return (float)Body.HeadDiameter;
         }
+        return distance;
     }
 
-
-    private void GhostHeadMovement()
+    public void GhostHeadMovement(float velocity)
     {
-        _snakeHead.velocity = Vector3.forward * SnakeHeadLink.ForwardVelocity;
-        _snakeHead.AddForce(SnakeHeadLink.ThrowForce);
+        _snakeHead.velocity = Vector3.forward * velocity;
+    }
+    public void GhostHeadSideForce(Vector3 force)
+    {
+        _snakeHead.AddForce(force);
     }
 
 

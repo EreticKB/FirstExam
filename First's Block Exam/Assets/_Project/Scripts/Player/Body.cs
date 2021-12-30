@@ -7,11 +7,9 @@ public class Body : MonoBehaviour
     public Transform Head;
     public Transform Tail;
     public TextMesh Text;
-    public Player Snake;
     public float HeadDiameter;
     public GhostPlayer GhostPlayer;
-
-    private Transform _headTwo;
+    [HideInInspector] public bool Collide;
     private LinkedListNode<Vector3> _linkedListLNode;
     private LinkedList<Transform> _segments = new LinkedList<Transform>();
     private LinkedList<Vector3> _positions = new LinkedList<Vector3>();
@@ -21,7 +19,6 @@ public class Body : MonoBehaviour
     private void Awake()
     {
         _positions.AddLast(Head.position);
-        _headTwo = GhostPlayer.transform;
     }
 
     private void Update()
@@ -34,11 +31,11 @@ public class Body : MonoBehaviour
             _positions.RemoveLast();
             distance -= HeadDiameter; //чтобы не уйти далеко за 1 и не было рывка.
         }
-        if (Snake.Collide) //чтобы двигать хвост, когда уперлись в блок.
+        if (Collide) //чтобы двигать хвост, когда уперлись в блок.
         {
-            distance = (_headTwo.position - GhostPlayer.Position).magnitude;
-            if (distance > HeadDiameter) distance = HeadDiameter;
+            distance = GhostPlayer.GetGhostDistance();            
         }
+        else GhostPlayer.GetGhostDistance();
 
         _linkedListLNode = _positions.First;
         foreach (Transform segment in _segments)
@@ -46,9 +43,9 @@ public class Body : MonoBehaviour
             segment.position = Vector3.Lerp(_linkedListLNode.Next.Value, _linkedListLNode.Value, distance / HeadDiameter);
             _linkedListLNode = _linkedListLNode.Next;
         }
-        if (distance / HeadDiameter >= 1f && Snake.Collide)
+        if (distance / HeadDiameter >= 1f && Collide)
         {
-            Snake.Collide = false;
+            Collide = false;
         }
     }
     public void ExtendSnake()

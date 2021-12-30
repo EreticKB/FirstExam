@@ -1,18 +1,24 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
     public Body Body; //нужна для извелечения длины змеи.
     public MainMenu Menu;
+    public Player Player;
     public List<int> PlatformAvaibility { get; private set; } = new List<int>();
     public Transform Level;
+    public float MoveDelay = .5f;
+    public Text ScoreScreen;
+    public Text ScoreMenu;
     public GameObject[] Platforms = new GameObject[6];
     private GameObject[] _platformPool = new GameObject[6];
     private int _previousPlatformPoolIndex;
     private int _obsoletePlatformPoolIndex;
-    
+    private int _score;
+
     public enum State
     {
         Playing,
@@ -69,8 +75,14 @@ public class Game : MonoBehaviour
             PushPlatform(i);
         }
         PullPlatform(0, -1, 0, 4);
+        UpdateMenu();
     }
 
+    private void UpdateMenu()
+    {
+        ScoreScreen.text = _score.ToString();
+        ScoreMenu.text = $"Score: {_score}";
+    }
 
     public void PullPlatform(int poolIndex, int previousPlatformPoolIndex, int platformPositionIndex, int size)
     {
@@ -91,9 +103,15 @@ public class Game : MonoBehaviour
         PullPlatform(poolIndex, previousPlatformPoolIndex, platformPositionIndex, Body.Size);
     }
 
+    public void AddScore()
+    {
+        _score++;
+        UpdateMenu();
+    }
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) AmDead(0);
+        if (Input.GetKeyDown(KeyCode.Escape)) AmDead();
     }
 
     public void PushPlatform(int poolIndex)
@@ -115,9 +133,9 @@ public class Game : MonoBehaviour
         CurrentState = State.DefeatDelay;
     }
 
-    public void AmDead(int score)
+    public void AmDead()
     {
-        if (score > Best) Best = score;
+        if (_score > Best) Best = _score;
         ShowMenu();
     }
 }
